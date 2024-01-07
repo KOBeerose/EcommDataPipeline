@@ -4,7 +4,9 @@ This is Data Preparation part for the Data Engineer Coding Challenge.
 
 ## Data Acquisition
 
-### Wrangling Real Data 
+
+
+### Wrangling Real Data
 
 **Download and unzip dataset**
 
@@ -24,6 +26,14 @@ You can also download it manually and unzip it inside data folder from [kaggle d
 
 **Run The data wrangling script**
 ```bash
-python .\data_preparation\data_wrangling.py
+python ./data_preparation/data_wrangling.py
 ```
 check the datasets directory to verify the csv output files for the script
+
+### Generating Fake Data 
+the first approach we can use to get a significant amount of data is random generation using Faker library
+
+**Run data_generation.py file**
+```bash
+
+```

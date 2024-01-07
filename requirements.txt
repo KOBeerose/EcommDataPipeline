@@ -2,3 +2,4 @@ kaggle
 notebook
 pandas
 geopy
+faker
