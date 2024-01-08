@@ -4,3 +4,4 @@ pandas
 geopy
 faker
 mysql-connector-python
+seaborn

@@ -10,19 +10,20 @@ fake = Faker()
 countries = [fake.country() for _ in range(20)]
 countries_df = pd.DataFrame({'name': countries, 'created_at': [datetime.now() for _ in countries]})
 
-# Generate data for 500 stores
+# Generate data for 500 stores spread over the last 7 years
 stores_data = []
 for _ in range(500):
+    created_at = fake.date_time_between(start_date='-7y', end_date='-4y')
     stores_data.append({
         'slug': fake.company(),
-        'created_at': fake.date_time_between(start_date='-3y', end_date='now'),
+        'created_at': created_at,
         'country_id': random.choice(countries_df.index) + 1
     })
 stores_df = pd.DataFrame(stores_data)
 
 # Generate product data for each store
 products_data = []
-for store_id in range(1, 501):
+for store_id, store in enumerate(stores_data, 1):
     for _ in range(100):
         products_data.append({
             'slug': fake.word(),
@@ -31,15 +32,18 @@ for store_id in range(1, 501):
         })
 products_df = pd.DataFrame(products_data)
 
-# Generate order data across multiple years
+# Generate order data starting from the store's creation date
 orders_data = []
-for store_id in range(1, 501):
-    num_orders = random.randint(500, 1500)
+for store_id, store in enumerate(stores_data, 1):
+    num_orders = random.randint(500, 1500)  # Random number of orders for each store
+    store_creation_date = store['created_at']  # Fetch the store's creation date
     for _ in range(num_orders):
+        # Ensure order date is after the store's creation date and before the current date
+        order_date = fake.date_time_between(start_date=store_creation_date, end_date='-4y')
         orders_data.append({
             'type': random.choice(['Online', 'In-Store', 'Pickup']),
             'store_id': store_id,
-            'created_at': fake.date_time_between(start_date='-7y', end_date='-4y')
+            'created_at': order_date
         })
 orders_df = pd.DataFrame(orders_data)
 

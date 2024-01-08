@@ -1,6 +1,10 @@
-import re
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
+from faker import Faker
+import random
+import re
+
+fake = Faker()
 
 # Load data
 users_df = pd.read_csv('./datasets/zomato/users.csv', index_col=[0])
@@ -8,6 +12,9 @@ restaurants_df = pd.read_csv('./datasets/zomato/restaurant.csv', index_col=[0])
 orders_df = pd.read_csv('./datasets/zomato/orders.csv', index_col=[0])
 menu_df = pd.read_csv('./datasets/zomato/menu.csv', index_col=[0])
 food_df = pd.read_csv('./datasets/zomato/food.csv', index_col=[0])
+
+# Ensure order_date is a datetime object
+orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
 
 # Adjust price based on description
 def extract_price(value):
@@ -21,9 +28,9 @@ def extract_price(value):
             price /= 2
         return price
     else:
-        return None 
+        return None
 
-# apply the function to the price column
+# Apply the function to the price column
 menu_df.iloc[:, 4] = menu_df.iloc[:, 4].astype(str)
 menu_df['price'] = menu_df.iloc[:, 4].apply(extract_price)
 
@@ -56,7 +63,15 @@ restaurants_df['city_id'] = restaurants_df['city'].map(city_to_city_id)
 # Prepare stores DataFrame
 stores_new = restaurants_df[['id', 'name', 'city_id']].copy()
 stores_new.rename(columns={'name': 'slug'}, inplace=True)
-stores_new['created_at'] = datetime.now()
+
+# Set 'created_at' for each store
+for store_id in stores_new['id']:
+    earliest_order_date = orders_df[orders_df['r_id'] == store_id]['order_date'].min()
+    if pd.notnull(earliest_order_date):
+        creation_date = earliest_order_date - timedelta(days=random.randint(1, 365))
+    else:
+        creation_date = datetime.now() - timedelta(days=365 * 3)
+    stores_new.loc[stores_new['id'] == store_id, 'created_at'] = creation_date
 
 # Create slugs
 def create_unique_slug(text, _id=None):
@@ -83,16 +98,26 @@ products_new.rename(columns={'menu_id': 'id', 'item': 'slug'}, inplace=True)
 products_new['slug'] = products_new.apply(lambda x: create_unique_slug(x['slug'], x['id']), axis=1)
 
 
+
 # ---------- orders ----------
 
+# Transform columns to datetime objects
+restaurants_df['created_at'] = pd.to_datetime(restaurants_df['created_at'])
+orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
+
 # Merge orders and restaurants DataFrames
-orders_restaurant_df = orders_df.merge(restaurants_df, left_on='r_id', right_on='id')
+orders_restaurant_df = orders_df.merge(restaurants_df, left_on='r_id', right_on='id', suffixes=('', '_store'))
+
+# Ensuring that the 'created_at_order' date is set after 'created_at_store'
+orders_restaurant_df['order_date'] = orders_restaurant_df.apply(
+    lambda row: fake.date_time_between(start_date=row['created_at_store'], end_date='now') if row['order_date'] < row['created_at_store'] else row['order_date'], axis=1
+)
 
 # Prepare orders DataFrame
-orders_new = orders_restaurant_df[['cuisine', 'r_id', 'order_date']].copy()
-orders_new.rename(columns={'cuisine': 'type', 'r_id': 'store_id', 'order_date': 'created_at'}, inplace=True)
+orders_new = orders_restaurant_df[['cuisine', 'r_id', 'created_at_order']].copy()
+orders_new.rename(columns={'cuisine': 'type', 'r_id': 'store_id', 'created_at_order': 'created_at'}, inplace=True)
 
-# rearrage orders columns
+# rearrange orders columns
 orders_new['id'] = range(1, len(orders_new) + 1)
 orders_new = orders_new[['id', 'type', 'store_id', 'created_at']]
 
@@ -107,7 +132,7 @@ order_items_new = order_menu_df[['r_id_x', 'sales_qty']].copy()
 order_items_new.rename(columns={'r_id_x': 'product_id', 'sales_qty': 'quantity'}, inplace=True)
 order_items_new = order_items_new.dropna().reset_index(drop=True)
 
-# rearrage order_items columns
+# rearrange order_items columns
 order_items_new['order_id'] = range(1, len(order_items_new) + 1)
 order_items_new = order_items_new[['order_id', 'product_id', 'quantity']]
 
