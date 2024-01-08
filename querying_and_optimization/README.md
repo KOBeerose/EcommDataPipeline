@@ -26,5 +26,5 @@ GRANT ALL PRIVILEGES ON coding_challenge_data.* TO 'username'@'localhost';
 Before running the script make sure you have store the database credentials in a the following environement variables: 
 *db_user* and *db_pwd*
 ```bash
-python ./querying_and_optimization/populate_db.py
+python ./querying_and_optimization/insert_zomato_data.py
 ```

@@ -108,8 +108,8 @@ order_items_new.rename(columns={'r_id_x': 'product_id', 'sales_qty': 'quantity'}
 order_items_new = order_items_new.dropna().reset_index(drop=True)
 
 # rearrage order_items columns
-order_items_new['id'] = range(1, len(order_items_new) + 1)
-order_items_new = order_items_new[['id', 'product_id', 'quantity']]
+order_items_new['order_id'] = range(1, len(order_items_new) + 1)
+order_items_new = order_items_new[['order_id', 'product_id', 'quantity']]
 
 # Save data to CSV
 cities_new.to_csv('./datasets/cities.csv', index=False)

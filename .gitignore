@@ -1,3 +1,11 @@
-datasets/**
+# ignore large dataset files and ipynb_checkpoints
+datasets/*.csv
+datasets/*.zip
+datasets/*/*.csv
+
 */.ipynb_checkpoints
-!datasets/**/.gitkeep
+
+# Ignore these directories to keep datasets structure
+!datasets/.gitkeep
+!datasets/generated/.gitkeep
+!datasets/zomato/.gitkeep
