@@ -101,23 +101,14 @@ products_new['slug'] = products_new.apply(lambda x: create_unique_slug(x['slug']
 
 # ---------- orders ----------
 
-# Transform columns to datetime objects
-restaurants_df['created_at'] = pd.to_datetime(restaurants_df['created_at'])
-orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
-
 # Merge orders and restaurants DataFrames
-orders_restaurant_df = orders_df.merge(restaurants_df, left_on='r_id', right_on='id', suffixes=('', '_store'))
+orders_restaurant_df = orders_df.merge(restaurants_df, left_on='r_id', right_on='id', suffixes=('_order', '_store'))
 
-# Ensuring that the 'created_at_order' date is set after 'created_at_store'
-orders_restaurant_df['order_date'] = orders_restaurant_df.apply(
-    lambda row: fake.date_time_between(start_date=row['created_at_store'], end_date='now') if row['order_date'] < row['created_at_store'] else row['order_date'], axis=1
-)
+# Prepare orders DataFrame with appropriate renaming
+orders_new = orders_restaurant_df[['cuisine', 'r_id', 'order_date']].copy()
+orders_new.rename(columns={'cuisine': 'type', 'r_id': 'store_id', 'order_date': 'created_at'}, inplace=True)
 
-# Prepare orders DataFrame
-orders_new = orders_restaurant_df[['cuisine', 'r_id', 'created_at_order']].copy()
-orders_new.rename(columns={'cuisine': 'type', 'r_id': 'store_id', 'created_at_order': 'created_at'}, inplace=True)
-
-# rearrange orders columns
+# Rearrange orders columns and assign new IDs
 orders_new['id'] = range(1, len(orders_new) + 1)
 orders_new = orders_new[['id', 'type', 'store_id', 'created_at']]
 

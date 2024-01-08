@@ -25,13 +25,14 @@ unzip ./datasets/zomato-database.zip -d ./datasets/zomato
 You can also download it manually and unzip it inside data folder from [kaggle datasets](https://www.kaggle.com/datasets/anas123siddiqui/zomato-database?select=restaurant.csv)
 
 **Run The data wrangling script**
+First approach is to process zomato dataset to make it compatible with the schema we have ( except for city instead of country 😉 )
 ```bash
 python ./data_preparation/data_wrangling.py
 ```
 check the datasets directory to verify the csv output files for the script
 
 ### Generating Fake Data 
-the first approach we can use to get a significant amount of data is random generation using Faker library
+We can use to get a significant amount of data using a second approach of random generation using Faker library
 
 **Run data_generation.py file**
 ```bash
