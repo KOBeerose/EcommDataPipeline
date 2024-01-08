@@ -9,6 +9,7 @@ INNER JOIN
     coding_challenge_data.products AS products ON order_items.product_id = products.id;
 
 -- Calculate Gross Merchandise Volume specific for each country
+-- Making sure to utilise indexed foreign keys to join the tables
 SELECT 
     countries.name AS CountryName, 
     SUM(products.price * order_items.quantity) AS GrossMerchandiseVolume,

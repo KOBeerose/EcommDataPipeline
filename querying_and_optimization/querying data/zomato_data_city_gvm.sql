@@ -9,6 +9,7 @@ INNER JOIN
     coding_challenge_db.products AS products ON order_items.product_id = products.id;
 
 -- Calculate Gross Merchandise Volume specific for each city
+-- Making sure to utilise indexed foreign keys to join the tables
 SELECT 
     cities.name AS CityName, 
     SUM(products.price * order_items.quantity) AS GrossMerchandiseVolume,

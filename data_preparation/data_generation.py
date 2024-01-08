@@ -3,62 +3,58 @@ from datetime import datetime, timedelta
 import random
 import pandas as pd
 
-# Initialize Faker
+# Initialize Faker for data generation
 fake = Faker()
 
-# Generate a list of 20 unique countries
+# Generate 20 unique countries
 countries = [fake.country() for _ in range(20)]
 countries_df = pd.DataFrame({'name': countries, 'created_at': [datetime.now() for _ in countries]})
 
-# Generate stores (assuming 500 stores for more substantial data)
+# Generate data for 500 stores
 stores_data = []
 for _ in range(500):
     stores_data.append({
-        'slug': fake.slug(),
-        'created_at': datetime.now(),
+        'slug': fake.company(),
+        'created_at': fake.date_time_between(start_date='-3y', end_date='now'),
         'country_id': random.choice(countries_df.index) + 1
     })
 stores_df = pd.DataFrame(stores_data)
 
-# Generate products (assuming each store has 100 products)
+# Generate product data for each store
 products_data = []
 for store_id in range(1, 501):
     for _ in range(100):
-        price = random.uniform(10, 500)
         products_data.append({
-            'slug': fake.slug(),
-            'price': price,
+            'slug': fake.word(),
+            'price': random.uniform(10, 500),
             'store_id': store_id
         })
 products_df = pd.DataFrame(products_data)
 
-# Generate orders (assuming each store has 1000 orders over 12 months)
-start_date = datetime.now() - timedelta(days=365)
+# Generate order data across multiple years
 orders_data = []
 for store_id in range(1, 501):
-    for _ in range(1000):
-        order_date = fake.date_time_between(start_date=start_date, end_date='now')
+    num_orders = random.randint(500, 1500)
+    for _ in range(num_orders):
         orders_data.append({
-            'type': random.choice(['Type1', 'Type2']),
+            'type': random.choice(['Online', 'In-Store', 'Pickup']),
             'store_id': store_id,
-            'created_at': order_date
+            'created_at': fake.date_time_between(start_date='-7y', end_date='-4y')
         })
 orders_df = pd.DataFrame(orders_data)
 
-# Generate order items (assuming 5 items per order on average)
+# Generate order items data
 order_items_data = []
-for order_id in range(1, 500001):  # 500 stores * 1000 orders
+for order_id in range(1, len(orders_data) + 1):
     for _ in range(random.randint(1, 5)):
-        product_id = random.randint(1, 50000)  # 500 stores * 100 products
-        quantity = random.randint(1, 10)
         order_items_data.append({
             'order_id': order_id,
-            'product_id': product_id,
-            'quantity': quantity
+            'product_id': random.randint(1, 50000),
+            'quantity': random.randint(1, 10)
         })
 order_items_df = pd.DataFrame(order_items_data)
 
-# Save data to CSV files
+# Save generated data to CSV files
 countries_df.to_csv('./datasets/generated/countries.csv', index=False)
 stores_df.to_csv('./datasets/generated/stores.csv', index=False)
 products_df.to_csv('./datasets/generated/products.csv', index=False)

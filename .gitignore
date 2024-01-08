@@ -6,6 +6,5 @@ datasets/*/*.csv
 */.ipynb_checkpoints
 
 # Ignore these directories to keep datasets structure
-!datasets/.gitkeep
 !datasets/generated/.gitkeep
 !datasets/zomato/.gitkeep

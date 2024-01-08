@@ -1,6 +1,7 @@
 -- 2. Retrieve top stores with their corresponding GMV
 
 -- Retrieves the top 20 stores based on the GMV work for both generated and zomato data.
+-- Making sure to utilise indexed foreign keys to join the tables
 SELECT 
     stores.id AS StoreID, 
     stores.slug AS StoreName, 
