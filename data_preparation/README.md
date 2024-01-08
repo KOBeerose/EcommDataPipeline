@@ -35,5 +35,5 @@ the first approach we can use to get a significant amount of data is random gene
 
 **Run data_generation.py file**
 ```bash
-
+python ./data_preparation/data_generation.py
 ```

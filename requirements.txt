@@ -3,3 +3,4 @@ notebook
 pandas
 geopy
 faker
+mysql-connector-python

@@ -2,9 +2,9 @@
 
 This is a repo for the Data Engineer Coding Challenge.
 
-## Launching the Project
+## Launching Project
 
-### How to Start
+### Environment setup
 
 **Create and Activate virtual environment**
 ```bash
@@ -29,3 +29,20 @@ Install libraries:
 cd .\EcommDataPipeline
 pip install -r requirements.txt
 ```
+### Database Setup
+
+**Install MySQL Server**
+
+Download and install MySQL Server from the [official website](https://dev.mysql.com/downloads/mysql/). 
+
+After installation in Windows:
+```bash
+setx PATH "%PATH%;C:\Program Files\MySQL\MySQL Server 8.0\bin"
+```
+
+Install in Linux using:
+```bash
+sudo apt install mysql-server
+sudo systemctl start mysql
+```
+
