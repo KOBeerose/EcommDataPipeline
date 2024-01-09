@@ -62,7 +62,7 @@ bin/logstash --version
 **Logstash Config**
 
 In the Logstash conf file named config\logstash-sample.conf change the user and password to the crediantials for Elasticsearch
-```json
+```yaml
 elasticsearch {
     hosts => ["http://localhost:9200"]
     index => "test.logstash"
@@ -72,6 +72,7 @@ elasticsearch {
 ```
 
 **Testing Elasticsearch & Logstash**
+
 Copy the logstash-sample.conf to the config directory in Logstash folder and run the following:
 ```bash
 bin\logstash -f .\config\logstash-sample.conf --config.reload.automatic
@@ -90,12 +91,29 @@ We will use Logstash with its JDBC plugin to pull data from the database at regu
 
 Download JDBC MySQL from the [official website](https://downloads.mysql.com/archives/c-j/) 
 
-Unzip the folder and make sure to put the **mysql-connector-j-version.jar** file in a directory that exists in PATH.
+Unzip the folder and make sure to put the **mysql-connector-j-version.jar** file in a directory that exists in **PATH**.
 
 **logstach.conf file**
 
-The logstash.conf files contain the configuration that defines the JDBC input for each table in our database and specifies how this data should be output to Elasticsearch
+The logstash.conf files contain the configuration that defines the **JDBC** input for each table in our database and specifies how this data should be **output to Elasticsearch**
 
 **Which is better having daily or monthly indices and why?**
 
-So our usecase is a fast growing company like Zomato or YOUCAN which have high data volume and high frequency operations. In this case I belive it's better to have **a daily indices**  because it will make it easier to manage the data lifecycle ( you can delete old indices without affecting newer data )
+So our usecase is a fast **growing company** like Zomato or YOUCAN which have **high data volume** and high **frequency** operations. In this case I belive it's better to have **a daily indices**  because it will make it easier to manage the data lifecycle ( you can delete old indices **without affecting** newer data )
+
+**Create a small api that simulate the creation of an order**
+
+The fastest way to create the API is using Flask, run the server using: 
+```bash
+python ./elasticsearch/api_simulate.py
+```
+To test the API send a POST request from your API Client:
+
+url: http://localhost:5000/create_order
+
+data : 
+{
+    "type": "Online",
+    "store_id": 1,
+    "created_at": "2024-01-08T10:00:00"
+}
