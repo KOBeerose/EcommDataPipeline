@@ -6,4 +6,5 @@ faker
 mysql-connector-python
 seaborn
 elasticsearch
-Flask 
+Flask
+google-cloud-bigquery

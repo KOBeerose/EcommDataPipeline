@@ -61,7 +61,7 @@ bin/logstash --version
 
 **Logstash Config**
 
-In the Logstash conf file named config\logstash-sample.conf change the user and password to the crediantials for Elasticsearch
+In the Logstash conf file named config\logstash-sample.conf change the user and password to the credentials for Elasticsearch
 ```yaml
 elasticsearch {
     hosts => ["http://localhost:9200"]
@@ -96,6 +96,20 @@ Unzip the folder and make sure to put the **mysql-connector-j-version.jar** file
 **logstach.conf file**
 
 The logstash.conf files contain the configuration that defines the **JDBC** input for each table in our database and specifies how this data should be **output to Elasticsearch**
+
+```yaml
+  jdbc {
+    jdbc_driver_library => Path_to_JDBC_connector
+    jdbc_driver_class => "com.mysql.cj.jdbc.Driver"
+    jdbc_connection_string => "jdbc:mysql://localhost:3306/db_name"
+    jdbc_user => "${db_user}"  
+    jdbc_password => "${db_pwd}"  
+    
+    schedule => "0 * * * *"  
+    statement => "SELECT * FROM db_name.order_items"
+  }
+
+```
 
 **Which is better having daily or monthly indices and why?**
 

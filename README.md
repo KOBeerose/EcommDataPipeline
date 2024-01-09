@@ -2,6 +2,15 @@
 
 This is a repo for the Data Engineer Coding Challenge.
 
+- **[Part 0: Data Preparation](https://github.com/KOBeerose/EcommDataPipeline/tree/main/data_preparation)**: This section covers the steps of preparing and processing data.
+
+- **[Part 1: Querying and Optimization](https://github.com/KOBeerose/EcommDataPipeline/tree/main/querying_and_optimization)**: This part involves populating and optimizing database.
+
+- **[Part 2: Cohort Analysis](https://github.com/KOBeerose/EcommDataPipeline/tree/main/cohort_analysis)**: Here, you'll explored customer behavior and retention over time.
+- **[Part 3: Elasticsearch](https://github.com/KOBeerose/EcommDataPipeline/tree/main/elasticsearch)**: This section focuses on integrating Elasticsearch for data monitoring.
+- **[Part 4: BigQuery](https://github.com/KOBeerose/EcommDataPipeline/tree/main/bigquery)**: In this part, we integrated BigQuery as a data warehouse for data analytics.
+
+
 ## Launching Project
 
 ### Environment setup
